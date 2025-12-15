@@ -1,0 +1,121 @@
+package selepractice;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class Mini_Project2 {
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+		// TODO Auto-generated method stub
+		String url = "https://www.demoblaze.com/";
+		WebDriver driver = new ChromeDriver();
+		driver.get(url);
+		//page maximize
+		driver.manage().window().maximize();
+		//page scroll
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,400)");
+		
+		String linkText = "Phones";
+		String linkText1 = "Samsung galaxy s6";
+		String addCart = "Add to cart";
+		String order = "//button[text()  = 'Place Order']";
+		//wait till the page run
+		WebDriverWait wait = new WebDriverWait (driver, Duration.ofSeconds(10));
+		
+		//Take a screenshot of menu page
+		TakesScreenshot screenshot = (TakesScreenshot) driver;
+		File src = screenshot.getScreenshotAs(OutputType.FILE);
+		File dest = new File ("C:\\Users\\ADMIN\\eclipse-workspace\\selepractice\\Screenshot\\prdtStore.png");
+		FileUtils.copyFile(src, dest); 
+		
+		//To click the phone category
+		WebElement phoneCategory = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText)));
+		phoneCategory.click();
+		
+		//wait to run the program
+		Thread.sleep(3000);
+		
+		//page scroll to click the product
+		JavascriptExecutor js1 = (JavascriptExecutor) driver;
+		js1.executeScript("window.scrollBy(0,400)");
+		
+		//To click the product 
+		WebElement firstPhone = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText1)));
+		firstPhone.click();
+		
+		//Take screenshot of product
+		TakesScreenshot screenshot1 = (TakesScreenshot) driver;
+		File src1 = screenshot1.getScreenshotAs(OutputType.FILE);
+		File dest1 = new File ("C:\\Users\\ADMIN\\eclipse-workspace\\selepractice\\Screenshot\\Product.png");
+		FileUtils.copyFile(src1, dest1); 
+		
+		
+		//To add product in cart
+		WebElement addtoCart = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(addCart)));
+		addtoCart.click();
+		
+		//click alert button
+		wait.until(ExpectedConditions.alertIsPresent());
+		Alert alert = driver.switchTo().alert();
+		String msg = alert.getText();
+		System.out.println(msg);
+		alert.accept();
+		
+		//wait till page load
+		WebDriverWait wait1 = new WebDriverWait (driver, Duration.ofSeconds(10));
+		
+		//Go to cart
+		WebElement cartLink = wait1.until(ExpectedConditions.elementToBeClickable(By.linkText("Cart")));
+		cartLink.click();
+		
+		//To place the order
+		WebElement Placeorder = wait1.until(ExpectedConditions.elementToBeClickable(By.xpath(order)));
+		Placeorder.click();
+		
+		//enter the customer details
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("name"))).sendKeys("Harsha P");
+		driver.findElement(By.id("country")).sendKeys("India");
+		driver.findElement(By.id("city")).sendKeys("Chennai");
+		driver.findElement(By.id("card")).sendKeys("2786599372213371");
+		driver.findElement(By.id("month")).sendKeys("08");
+		driver.findElement(By.id("year")).sendKeys("2027");
+		
+		//Take screenshot of Customer details
+		TakesScreenshot screenshot2 = (TakesScreenshot) driver;
+		File src2 = screenshot2.getScreenshotAs(OutputType.FILE);
+		File dest2 = new File ("C:\\Users\\ADMIN\\eclipse-workspace\\selepractice\\Screenshot\\custDetails.png");
+		FileUtils.copyFile(src2, dest2); 
+				
+		
+		//to purchase the product
+		WebElement Purchase = wait1.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text() = 'Purchase']")));
+		Purchase.click();
+			}
+}
+
+The process-
+Product Store (Web Page)
+Click Phones to select any product
+Then scroll up to click the product
+Click any product (Samsung galaxy s6)
+To purchase the product, click add to cart
+Then click the ok button in Alert popup
+After that click cart to view product
+To place the order, click order placed 
+Then fill the Customer details
+Then click purchase
